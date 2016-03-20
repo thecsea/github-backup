@@ -1,0 +1,26 @@
+{
+  "name": "github-backup",
+  "version": "0.1.0",
+  "description": "This program allow to backup all repository of an organisation or user",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thecsea/github-backup.git"
+  },
+  "keywords": [
+    "backup",
+    "git"
+  ],
+  "author": "Claudio Cardinale",
+  "license": "GPL3",
+  "bugs": {
+    "url": "https://github.com/thecsea/github-backup/issues"
+  },
+  "dependencies": {
+    "github": "^0.2.4",
+    "shelljs": "^0.6.0"
+  }
+}
