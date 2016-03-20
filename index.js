@@ -14,20 +14,34 @@ var github = new GitHubApi({
 	    "user-agent": "My-Cool-GitHub-App" // GitHub is happy with a unique user agent
 	}
 });
-github.repos.getFromOrg({
-	org: "thecsea",
-	per_page: 100
-//TODO more than 100
-}, function(err, res) {
-	if(shell.test('-e','backups.old'))
-		shell.rm('-rf', 'backups.old')
-	if(shell.test('-e','backups'))
-		shell.mv('backups', 'backups.old')
-	shell.mkdir('backups');
-	shell.cd('backups')
-	for (i = 0; i < res.length; i++) { 	
-		shell.exec('git clone '+res[i].clone_url, {silent: true} , function(code, stdout, stderr) {
-		  console.log('Exit code:', code);
-		});
-	}
+shell.mkdir('-p', 'backups');
+shell.cd('backups')
+var current = 'backups'+(new Date().getTime());
+shell.mkdir(current);
+shell.cd(current);
+process.argv.forEach(function (val, index, array) {
+	if(index==0 || index==1)
+		return;
+	
+	github.repos.getFromOrg({
+		org: val,
+		per_page: 100
+	//TODO more than 100
+	}, function(err, res) {
+		shell.mkdir(val);
+		if(err)
+			return;
+		//TODO catch all errors;
+		//TODO check if res is valid
+		for (i = 0; i < res.length; i++) { 	
+			var position = val+'/'+res[i].name;
+			shell.mkdir(position);
+			shell.exec('git clone '+res[i].clone_url+' '+position, {silent: true} , function(code, stdout, stderr) {
+			  console.log('Exit code:', code);
+			});
+		}
+	});
+	
 });
+//TODO api-key for rate limit
+//TODO allow not only org but also users
